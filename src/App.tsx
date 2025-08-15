@@ -1,17 +1,14 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ChevronDown, ChevronRight, Layers, Command, Package, Info } from 'lucide-react';
-import { BLE_LAYERS, BLELayer } from './types/ble-stack';
+import { ChevronDown, ChevronRight, Layers, Command, Package } from 'lucide-react';
+import { BLE_LAYERS } from './types/ble-stack';
 import { LayerDetail } from './components/layer-detail';
 import { ProtocolStackOverview } from './components/protocol-stack-overview';
 import { PacketVisualization } from './components/packet-visualization';
 
 function App() {
-  const [selectedLayer, setSelectedLayer] = useState<BLELayer | null>(null);
   const [expandedLayers, setExpandedLayers] = useState<Set<string>>(new Set());
 
   const toggleLayerExpansion = (layerId: string) => {
