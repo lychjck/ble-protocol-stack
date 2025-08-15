@@ -99,12 +99,12 @@ export function ProtocolStackOverview() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* 协议栈架构图 */}
         <div className="lg:col-span-2">
-          
-        
+
+
 
           {/* 应用层 */}
           <div className="mb-4">
-            <Card 
+            <Card
               className="bg-gradient-to-r from-purple-500 to-purple-600 text-white border-0 shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 hover:scale-105"
               onClick={() => handleLayerClick(getLayerById('application')!)}
             >
@@ -122,88 +122,100 @@ export function ProtocolStackOverview() {
             <ArrowDown className="h-6 w-6 text-slate-400" />
           </div>
 
-          
+
 
           {/* Host层 */}
           <div className="mb-4">
             <div className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-lg p-6">
               <div className="space-y-4">
-                <Card 
-                    className="bg-gradient-to-r from-green-500 to-green-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
-                    onClick={() => handleLayerClick(getLayerById('gap')!)}
-                  >
-                    <CardContent className="p-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <h4 className="text-lg font-bold">GAP</h4>
-                        <ChevronRight className="h-4 w-4" />
-                      </div>
-                      <p className="text-green-100 text-xs mt-1">Generic Access Profile</p>
-                    </CardContent>
-                  </Card>
-                {/* GATT、GAP、ATT三列并行 */}
-                <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                  <Card 
-                    className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
-                    onClick={() => handleLayerClick(getLayerById('gatt')!)}
-                  >
-                    <CardContent className="p-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <h4 className="text-lg font-bold">GATT</h4>
-                        <ChevronRight className="h-4 w-4" />
-                      </div>
-                      <p className="text-blue-100 text-xs mt-1">Generic Attribute Profile</p>
-                    </CardContent>
-                  </Card>  
-                  
+
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+                  <div className="space-y-4 h-full md:col-span-2">
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                      {/* GATT */}
+                      <Card
+                        className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+                        onClick={() => handleLayerClick(getLayerById('gatt')!)}
+                      >
+                        <CardContent className="p-4 text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <h4 className="text-lg font-bold">GATT</h4>
+                            <ChevronRight className="h-4 w-4" />
+                          </div>
+                          <p className="text-blue-100 text-xs mt-1">Generic Attribute Profile</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* ATT */}
+                      <Card
+                        className="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+                        onClick={() => handleLayerClick(getLayerById('att')!)}
+                      >
+                        <CardContent className="p-4 text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <h4 className="text-lg font-bold">ATT</h4>
+                            <ChevronRight className="h-4 w-4" />
+                          </div>
+                          <p className="text-cyan-100 text-xs mt-1">Attribute Protocol</p>
+                        </CardContent>
+                      </Card>
+
+                      {/* SMP */}
+                      <Card
+                        className="bg-gradient-to-r from-red-500 to-red-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+                        onClick={() => handleLayerClick(getLayerById('smp')!)}
+                      >
+                        <CardContent className="p-4 text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <h4 className="text-lg font-bold">SMP</h4>
+                            <ChevronRight className="h-4 w-4" />
+                          </div>
+                          <p className="text-red-100 text-xs mt-1">Security Manager Protocol</p>
+                        </CardContent>
+                      </Card>
+
+                    </div>
+
+                    <div>
+                      {/* L2CAP */}
+                      <Card
+                        className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+                        onClick={() => handleLayerClick(getLayerById('l2cap')!)}
+                      >
+                        <CardContent className="p-4 text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <h4 className="text-lg font-bold">L2CAP</h4>
+                            <ChevronRight className="h-4 w-4" />
+                          </div>
+                          <p className="text-indigo-100 text-xs mt-1">Logical Link Control and Adaptation Protocol</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+
+                  <div className='h-full'>
+                    <Card
+                      className="h-full bg-gradient-to-r from-green-500 to-green-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+                      onClick={() => handleLayerClick(getLayerById('gap')!)}
+                    >
+                      <CardContent className="p-4 text-center h-full flex flex-col items-center justify-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <h4 className="text-lg font-bold">GAP</h4>
+                          <ChevronRight className="h-4 w-4" />
+                        </div>
+                        <p className="text-green-100 text-xs mt-1">Generic Access Profile</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+
                 </div>
 
-                {/* SMP和ATT并行 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card 
-                    className="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
-                    onClick={() => handleLayerClick(getLayerById('att')!)}
-                  >
-                    <CardContent className="p-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <h4 className="text-lg font-bold">ATT</h4>
-                        <ChevronRight className="h-4 w-4" />
-                      </div>
-                      <p className="text-cyan-100 text-xs mt-1">Attribute Protocol</p>
-                    </CardContent>
-                  </Card>
-                  <Card 
-                    className="bg-gradient-to-r from-red-500 to-red-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
-                    onClick={() => handleLayerClick(getLayerById('smp')!)}
-                  >
-                    <CardContent className="p-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <h4 className="text-lg font-bold">SMP</h4>
-                        <ChevronRight className="h-4 w-4" />
-                      </div>
-                      <p className="text-red-100 text-xs mt-1">Security Manager Protocol</p>
-                    </CardContent>
-                  </Card>
-                  
-                  
-                </div>
-
-                <div>
-                  <Card 
-                    className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
-                    onClick={() => handleLayerClick(getLayerById('l2cap')!)}
-                  >
-                    <CardContent className="p-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <h4 className="text-lg font-bold">L2CAP</h4>
-                        <ChevronRight className="h-4 w-4" />
-                      </div>
-                      <p className="text-indigo-100 text-xs mt-1">Logical Link Control and Adaptation Protocol</p>
-                    </CardContent>
-                  </Card>
-                </div>
 
                 {/* HCI */}
-                <Card 
+                <Card
                   className="bg-gradient-to-r from-orange-400 to-orange-500 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
                   onClick={() => handleLayerClick(getLayerById('hci')!)}
                 >
@@ -215,13 +227,14 @@ export function ProtocolStackOverview() {
                     <p className="text-orange-100 text-xs mt-1">Host Controller Interface</p>
                   </CardContent>
                 </Card>
+
               </div>
-              
+
               <div className="text-center mt-4">
                 <Badge variant="secondary" className="bg-slate-200 text-slate-700">Host</Badge>
               </div>
             </div>
-            
+
           </div>
 
           <div className="flex justify-center mb-4">
@@ -234,7 +247,7 @@ export function ProtocolStackOverview() {
               <div className="space-y-4">
 
                 {/* Link Layer */}
-                <Card 
+                <Card
                   className="bg-gradient-to-r from-slate-600 to-slate-700 text-white border-0 shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
                   onClick={() => handleLayerClick(getLayerById('link')!)}
                 >
@@ -247,7 +260,7 @@ export function ProtocolStackOverview() {
                   </CardContent>
                 </Card>
               </div>
-              
+
               <div className="text-center mt-4">
                 <Badge variant="secondary" className="bg-slate-200 text-slate-700">Controller</Badge>
               </div>
@@ -262,7 +275,7 @@ export function ProtocolStackOverview() {
               <CardHeader className="bg-gradient-to-r from-slate-600 to-slate-700 text-white">
                 <CardTitle className="flex items-center justify-between">
                   <span>{selectedLayer.name}</span>
-                  <button 
+                  <button
                     onClick={() => setSelectedLayer(null)}
                     className="text-white hover:text-slate-200"
                   >
@@ -276,7 +289,7 @@ export function ProtocolStackOverview() {
                   <h4 className="font-semibold text-slate-800 mb-2">描述</h4>
                   <p className="text-sm text-slate-600">{selectedLayer.description}</p>
                 </div>
-                
+
                 <div>
                   <h4 className="font-semibold text-slate-800 mb-2">核心功能</h4>
                   <ul className="space-y-1">
@@ -288,7 +301,7 @@ export function ProtocolStackOverview() {
                     ))}
                   </ul>
                 </div>
-                
+
                 <div>
                   <h4 className="font-semibold text-slate-800 mb-2">关键命令</h4>
                   <div className="flex flex-wrap gap-1">
@@ -319,13 +332,13 @@ export function ProtocolStackOverview() {
           <Info className="h-5 w-5 text-blue-600" />
           BLE协议栈架构说明
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600">
           <div className="space-y-2">
             <h4 className="font-semibold text-slate-700">应用层</h4>
             <p>用户应用程序和业务逻辑实现</p>
           </div>
-          
+
           <div className="space-y-2">
             <h4 className="font-semibold text-slate-700">主机层 (Host)</h4>
             <ul className="space-y-1 text-xs">
@@ -335,7 +348,7 @@ export function ProtocolStackOverview() {
               <li>• <strong>L2CAP</strong>: 逻辑链路控制</li>
             </ul>
           </div>
-          
+
           <div className="space-y-2">
             <h4 className="font-semibold text-slate-700">控制器层 (Controller)</h4>
             <ul className="space-y-1 text-xs">
@@ -344,7 +357,7 @@ export function ProtocolStackOverview() {
             </ul>
           </div>
         </div>
-        
+
         <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
           <h4 className="font-semibold text-blue-800 mb-2">关键特点</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-700">

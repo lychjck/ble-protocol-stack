@@ -59,7 +59,7 @@ function App() {
             <div className="grid gap-6">
               {BLE_LAYERS.sort((a, b) => b.position - a.position).map((layer) => (
                 <Card key={layer.id} className="overflow-hidden">
-                  <CardHeader 
+                  <CardHeader
                     className={`${layer.color} text-white cursor-pointer`}
                     onClick={() => toggleLayerExpansion(layer.id)}
                   >
@@ -75,13 +75,13 @@ function App() {
                           {layer.description}
                         </CardDescription>
                       </div>
-                      {expandedLayers.has(layer.id) ? 
-                        <ChevronDown className="h-6 w-6" /> : 
+                      {expandedLayers.has(layer.id) ?
+                        <ChevronDown className="h-6 w-6" /> :
                         <ChevronRight className="h-6 w-6" />
                       }
                     </div>
                   </CardHeader>
-                  
+
                   {expandedLayers.has(layer.id) && (
                     <CardContent className="p-6">
                       <LayerDetail layer={layer} />
