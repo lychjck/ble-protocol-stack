@@ -7,7 +7,6 @@ import { BLE_LAYERS } from './types/ble-stack';
 import { LayerDetail } from './components/layer-detail';
 import { ProtocolStackOverview } from './components/protocol-stack-overview';
 import { PacketVisualization } from './components/packet-visualization';
-import { PDUStructureDesigner } from './components/pdu-structure-designer';
 import { BLEProtocolStack } from './components/ble-protocol-stack';
 
 function App() {

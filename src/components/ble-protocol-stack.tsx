@@ -365,13 +365,46 @@ export function BLEProtocolStack() {
               
               {/* 字节标尺 */}
               {totalBytes > 0 && (
-                <div className="flex text-xs text-muted-foreground mb-2">
-                  {Array.from({ length: Math.ceil(totalBytes) + 1 }, (_, i) => (
-                    <div key={i} className="flex-1 text-center border-r border-muted last:border-r-0">
-                      {i}
-                    </div>
-                  ))}
-                  <div className="flex-1 text-center">... bytes</div>
+                <div className="flex gap-1 text-xs text-muted-foreground mb-2">
+                  {layer.fields.map((field, index) => {
+                    const isClickable = field.isClickable;
+                    const isVariable = field.bits === 0 && !isClickable;
+                    let width = "auto";
+                    
+                    if (!isVariable && !isClickable && totalBytes > 0) {
+                      const widthRatio = (field.bytes / totalBytes) * 80;
+                      width = `${Math.max(widthRatio, 8)}%`;
+                    } else if (isVariable) {
+                      width = "120px";
+                    } else if (isClickable) {
+                      width = "150px";
+                    }
+                    
+                    // 计算当前字段的起始字节位置
+                    let startByte = 0;
+                    for (let i = 0; i < index; i++) {
+                      const prevField = layer.fields[i];
+                      if (!prevField.isClickable && prevField.bits > 0) {
+                        startByte += prevField.bytes;
+                      }
+                    }
+                    
+                    if (isClickable || isVariable) {
+                      return <div key={index} style={{ width }} className="text-center"></div>;
+                    }
+                    
+                    // 为固定大小字段显示字节标尺
+                    const byteCount = Math.ceil(field.bytes);
+                    return (
+                      <div key={index} style={{ width }} className="flex">
+                        {Array.from({ length: byteCount }, (_, i) => (
+                          <div key={i} className="flex-1 text-center border-r border-gray-300 last:border-r-0">
+                            {startByte + i}
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
