@@ -195,47 +195,47 @@ const protocolLayers: Record<string, ProtocolLayer> = {
   gatt: {
     name: "GATT",
     title: "GATT (Generic Attribute Profile) 层",
-    description: "GATT定义了BLE设备间数据交换的框架，基于属性的客户端-服务器架构 - 这是最顶层的应用协议",
+    description: "GATT是一个应用层协议框架，定义了基于属性的客户端-服务器架构。它不是一个具体的数据包格式，而是定义了服务、特征等概念模型，实际数据传输通过ATT协议完成。",
     fields: [
       {
-        name: "Service UUID",
-        bits: 16,
-        bytes: 2,
-        description: "服务的唯一标识符，定义设备提供的功能",
-        color: "bg-blue-200 border-blue-400",
-        values: ["0x1800 - Generic Access", "0x1801 - Generic Attribute", "0x180F - Battery Service"]
-      },
-      {
-        name: "Characteristic UUID",
-        bits: 16,
-        bytes: 2,
-        description: "特征的唯一标识符，定义具体的数据类型",
-        color: "bg-green-200 border-green-400",
-        values: ["0x2A00 - Device Name", "0x2A01 - Appearance", "0x2A19 - Battery Level"]
-      },
-      {
-        name: "Properties",
-        bits: 8,
-        bytes: 1,
-        description: "特征的属性标志位",
-        color: "bg-yellow-200 border-yellow-400",
-        values: ["Read (0x02)", "Write (0x08)", "Notify (0x10)", "Indicate (0x20)"]
-      },
-      {
-        name: "Value Handle",
-        bits: 16,
-        bytes: 2,
-        description: "特征值的句柄",
-        color: "bg-purple-200 border-purple-400",
-        values: ["0x0001-0xFFFF - Handle range"]
-      },
-      {
-        name: "Characteristic Value",
+        name: "服务 (Service)",
         bits: 0,
         bytes: 0,
-        description: "实际的特征数据值 - 这是用户数据的最终载荷",
-        color: "bg-red-200 border-red-400",
-        values: ["Variable length application data"]
+        description: "服务是一组相关功能的集合，由UUID标识",
+        color: "bg-blue-100 border-blue-300",
+        values: ["Generic Access Service (0x1800)", "Generic Attribute Service (0x1801)", "Battery Service (0x180F)", "Heart Rate Service (0x180D)"]
+      },
+      {
+        name: "特征 (Characteristic)",
+        bits: 0,
+        bytes: 0,
+        description: "特征是服务中的具体数据项，包含属性、句柄和值",
+        color: "bg-green-100 border-green-300",
+        values: ["Device Name (0x2A00)", "Appearance (0x2A01)", "Battery Level (0x2A19)", "Heart Rate Measurement (0x2A37)"]
+      },
+      {
+        name: "属性 (Attribute)",
+        bits: 0,
+        bytes: 0,
+        description: "属性是GATT数据库中的基本单元，每个属性有句柄、类型和值",
+        color: "bg-yellow-100 border-yellow-300",
+        values: ["Handle: 0x0001-0xFFFF", "Type: UUID", "Value: Variable length data", "Permissions: Read/Write/Notify/Indicate"]
+      },
+      {
+        name: "描述符 (Descriptor)",
+        bits: 0,
+        bytes: 0,
+        description: "描述符提供特征的额外信息，如配置和格式描述",
+        color: "bg-purple-100 border-purple-300",
+        values: ["Client Characteristic Configuration (0x2902)", "Characteristic User Description (0x2901)", "Characteristic Format (0x2904)"]
+      },
+      {
+        name: "应用数据",
+        bits: 0,
+        bytes: 0,
+        description: "实际的应用层数据，通过ATT协议在特征值中传输",
+        color: "bg-red-100 border-red-300",
+        values: ["传感器数据", "控制命令", "状态信息", "配置参数"]
       }
     ]
   }
@@ -326,53 +326,41 @@ export function BLEProtocolStack() {
         <CardContent>
           <div className="space-y-4">
             {/* 数据包可视化 */}
-            <div className="border rounded-lg p-4 bg-muted/20">
-              <div className="flex flex-wrap gap-1 mb-4">
-                {layer.fields.map((field, index) => {
-                  const isClickable = field.isClickable;
-                  const isVariable = field.bits === 0 && !isClickable;
-                  let width = "auto";
-                  
-                  if (!isVariable && !isClickable && totalBytes > 0) {
-                    const widthRatio = (field.bytes / totalBytes) * 80; // 80% for non-variable fields
-                    width = `${Math.max(widthRatio, 8)}%`;
-                  } else if (isVariable) {
-                    width = "120px";
-                  } else if (isClickable) {
-                    width = "150px";
-                  }
-                  
-                  return (
+            {currentLayer === 'gatt' ? (
+              // GATT层特殊显示 - 概念框架而非字节结构
+              <div className="border rounded-lg p-4 bg-gradient-to-r from-blue-50 to-green-50">
+                <div className="text-center mb-4">
+                  <h3 className="font-medium text-lg">GATT应用层框架</h3>
+                  <p className="text-sm text-muted-foreground">
+                    GATT不是PDU层，而是定义如何使用ATT协议的概念框架
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                  {layer.fields.map((field, index) => (
                     <div
                       key={index}
-                      className={`${field.color} border-2 rounded px-2 py-1 cursor-pointer hover:opacity-80 transition-all flex-shrink-0 ${
-                        isClickable ? 'hover:scale-105 shadow-lg' : ''
-                      }`}
-                      style={{ width }}
+                      className={`${field.color} border-2 rounded p-3 cursor-pointer hover:opacity-80 transition-all h-24 flex flex-col`}
                       onClick={() => handleFieldClick(field)}
                     >
-                      <div className="text-xs font-medium truncate flex items-center">
-                        {field.name}
-                        {isClickable && <ChevronDown className="w-3 h-3 ml-1" />}
-                      </div>
-                      <div className="text-xs text-gray-600">
-                        {field.bits === 0 ? 'Variable' : `${field.bits} bits`}
+                      <div className="font-medium text-sm mb-2 flex-shrink-0">{field.name}</div>
+                      <div className="text-xs text-gray-600 flex-1 overflow-hidden">
+                        {field.description}
                       </div>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
-              
-              {/* 字节标尺 */}
-              {totalBytes > 0 && (
-                <div className="flex gap-1 text-xs text-muted-foreground mb-2">
+            ) : (
+              // 其他层的正常字节结构显示
+              <div className="border rounded-lg p-4 bg-muted/20">
+                <div className="flex flex-wrap gap-1 mb-4">
                   {layer.fields.map((field, index) => {
                     const isClickable = field.isClickable;
                     const isVariable = field.bits === 0 && !isClickable;
                     let width = "auto";
                     
                     if (!isVariable && !isClickable && totalBytes > 0) {
-                      const widthRatio = (field.bytes / totalBytes) * 80;
+                      const widthRatio = (field.bytes / totalBytes) * 80; // 80% for non-variable fields
                       width = `${Math.max(widthRatio, 8)}%`;
                     } else if (isVariable) {
                       width = "120px";
@@ -380,34 +368,73 @@ export function BLEProtocolStack() {
                       width = "150px";
                     }
                     
-                    // 计算当前字段的起始字节位置
-                    let startByte = 0;
-                    for (let i = 0; i < index; i++) {
-                      const prevField = layer.fields[i];
-                      if (!prevField.isClickable && prevField.bits > 0) {
-                        startByte += prevField.bytes;
-                      }
-                    }
-                    
-                    if (isClickable || isVariable) {
-                      return <div key={index} style={{ width }} className="text-center"></div>;
-                    }
-                    
-                    // 为固定大小字段显示字节标尺
-                    const byteCount = Math.ceil(field.bytes);
                     return (
-                      <div key={index} style={{ width }} className="flex">
-                        {Array.from({ length: byteCount }, (_, i) => (
-                          <div key={i} className="flex-1 text-center border-r border-gray-300 last:border-r-0">
-                            {startByte + i}
-                          </div>
-                        ))}
+                      <div
+                        key={index}
+                        className={`${field.color} border-2 rounded px-2 py-1 cursor-pointer hover:opacity-80 transition-all flex-shrink-0 ${
+                          isClickable ? 'hover:scale-105 shadow-lg' : ''
+                        }`}
+                        style={{ width }}
+                        onClick={() => handleFieldClick(field)}
+                      >
+                        <div className="text-xs font-medium truncate flex items-center">
+                          {field.name}
+                          {isClickable && <ChevronDown className="w-3 h-3 ml-1" />}
+                        </div>
+                        <div className="text-xs text-gray-600">
+                          {field.bits === 0 ? 'Variable' : `${field.bits} bits`}
+                        </div>
                       </div>
                     );
                   })}
                 </div>
-              )}
-            </div>
+                
+                {/* 字节标尺 */}
+                {totalBytes > 0 && (
+                  <div className="flex gap-1 text-xs text-muted-foreground mb-2">
+                    {layer.fields.map((field, index) => {
+                      const isClickable = field.isClickable;
+                      const isVariable = field.bits === 0 && !isClickable;
+                      let width = "auto";
+                      
+                      if (!isVariable && !isClickable && totalBytes > 0) {
+                        const widthRatio = (field.bytes / totalBytes) * 80;
+                        width = `${Math.max(widthRatio, 8)}%`;
+                      } else if (isVariable) {
+                        width = "120px";
+                      } else if (isClickable) {
+                        width = "150px";
+                      }
+                      
+                      // 计算当前字段的起始字节位置
+                      let startByte = 0;
+                      for (let i = 0; i < index; i++) {
+                        const prevField = layer.fields[i];
+                        if (!prevField.isClickable && prevField.bits > 0) {
+                          startByte += prevField.bytes;
+                        }
+                      }
+                      
+                      if (isClickable || isVariable) {
+                        return <div key={index} style={{ width }} className="text-center"></div>;
+                      }
+                      
+                      // 为固定大小字段显示字节标尺
+                      const byteCount = Math.ceil(field.bytes);
+                      return (
+                        <div key={index} style={{ width }} className="flex">
+                          {Array.from({ length: byteCount }, (_, i) => (
+                            <div key={i} className="flex-1 text-center border-r border-gray-300 last:border-r-0">
+                              {startByte + i}
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* 字段详细信息 */}
             {selectedField && (
@@ -463,7 +490,9 @@ export function BLEProtocolStack() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>上层载荷</CardTitle>
+                  <CardTitle>
+                    {currentLayer === 'gatt' ? '数据载荷' : '上层载荷'}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
@@ -475,6 +504,14 @@ export function BLEProtocolStack() {
                         <ChevronDown className="w-4 h-4 text-muted-foreground" />
                       </div>
                     ))}
+                    {currentLayer === 'gatt' && (
+                      <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+                        <p className="text-xs text-blue-700">
+                          💡 GATT层不是实际的数据包层，而是定义如何组织和解释ATT属性数据的应用框架。
+                          实际的数据仍然通过ATT协议传输。
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
