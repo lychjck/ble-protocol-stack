@@ -37,7 +37,7 @@ function App() {
         </div>
 
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8">
+          <TabsList className="grid w-full grid-cols-3 mb-8">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <Layers className="h-4 w-4" />
               协议栈总览
@@ -45,10 +45,6 @@ function App() {
             <TabsTrigger value="layers" className="flex items-center gap-2">
               <Command className="h-4 w-4" />
               分层详情
-            </TabsTrigger>
-            <TabsTrigger value="packets" className="flex items-center gap-2">
-              <Package className="h-4 w-4" />
-              数据包结构
             </TabsTrigger>
 
             <TabsTrigger value="protocal_stack" className="flex items-center gap-2">
@@ -96,10 +92,6 @@ function App() {
                 </Card>
               ))}
             </div>
-          </TabsContent>
-
-          <TabsContent value="packets">
-            <PacketVisualization layers={BLE_LAYERS} />
           </TabsContent>
 
           <TabsContent value="protocal_stack">
